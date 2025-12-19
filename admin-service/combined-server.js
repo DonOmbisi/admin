@@ -6,6 +6,8 @@ const bcrypt = require('bcryptjs');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const path = require('path');
+const multer = require('multer');
+const fs = require('fs');
 require('dotenv').config();
 
 const app = express();
@@ -28,7 +30,7 @@ app.use(cors({
     'http://localhost:3000',  // Local frontend
     'https://everythingmaternity.vercel.app',  // Previous frontend
     process.env.NODE_ENV === 'production'
-      ? 'https://your-admin-frontend.onrender.com'  // ← Replace with your actual admin frontend URL
+      ? 'https://admin-service-xq0t.onrender.com'  // ← Replace with your actual admin frontend URL
       : undefined
   ].filter(Boolean),  // Remove undefined values
   credentials: true
@@ -44,6 +46,23 @@ app.use('/api/', limiter);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Ensure uploads directory exists
+const uploadsDir = path.join(__dirname, 'uploads');
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir, { recursive: true });
+}
+
+// Configure multer for file uploads
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: {
+    fileSize: 10 * 1024 * 1024 // 10MB limit
+  }
+});
+
+// Serve uploaded files statically
+app.use('/uploads', express.static(uploadsDir));
 
 // Database connection
 mongoose.connect(MONGODB_URI, {
@@ -146,6 +165,34 @@ app.post('/api/auth/login', async (req, res) => {
   } catch (error) {
     console.error('Login error:', error);
     res.status(500).json({ error: 'Login failed' });
+  }
+});
+
+// File upload endpoint for saving images
+app.post('/api/upload-image', upload.single('image'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'No file uploaded' });
+    }
+
+    // Generate unique filename
+    const filename = `${Date.now()}-${req.file.originalname}`;
+    const filepath = path.join(uploadsDir, filename);
+
+    // Save file to disk
+    fs.writeFileSync(filepath, req.file.buffer);
+
+    // Return the URL for the uploaded image
+    const baseUrl = process.env.NODE_ENV === 'production'
+      ? `https://${process.env.RENDER_EXTERNAL_HOSTNAME || 'admin-service-xq0t.onrender.com'}`
+      : `http://localhost:${PORT}`;
+    const imageUrl = `${baseUrl}/uploads/${filename}`;
+    console.log('Image uploaded:', imageUrl);
+
+    res.json({ imageUrl });
+  } catch (error) {
+    console.error('Upload error:', error);
+    res.status(500).json({ error: 'Failed to upload image' });
   }
 });
 

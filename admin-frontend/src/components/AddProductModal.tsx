@@ -2,11 +2,17 @@ import React, { useState } from 'react';
 import { useAdminService } from '../context/AdminServiceContext';
 import { X, Save, Upload } from 'lucide-react';
 
+// API base URL - use environment variable for separate deployment
+const API_BASE = import.meta.env.VITE_ADMIN_API_URL ||
+  (import.meta.env.PROD
+    ? 'https://admin-service-xq0t.onrender.com'
+    : 'http://localhost:3002');
+
 // Initialize Clarifai with admin service proxy
 const clarifaiApp = {
   models: {
     predict: async (_modelId: string, imageUrl: string) => {
-      const response = await fetch('http://localhost:3002/api/clarifai/analyze', {
+      const response = await fetch(`${API_BASE}/api/clarifai/analyze`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -201,7 +207,7 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ isOpen, onClose }) =>
                           formData.append('image', file);
                           
                           try {
-                            const uploadResponse = await fetch('http://localhost:3002/api/upload-image', {
+                            const uploadResponse = await fetch(`${API_BASE}/api/upload-image`, {
                               method: 'POST',
                               body: formData
                             });
@@ -215,7 +221,7 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ isOpen, onClose }) =>
                               const analyzeFormData = new FormData();
                               analyzeFormData.append('image', file);
                               
-                              const analysisResponse = await fetch('http://localhost:3002/api/clarifai/analyze-file', {
+                              const analysisResponse = await fetch(`${API_BASE}/api/clarifai/analyze-file`, {
                                 method: 'POST',
                                 body: analyzeFormData
                               });

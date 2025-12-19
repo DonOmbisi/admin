@@ -91,7 +91,7 @@ export const AdminServiceProvider: React.FC<{ children: ReactNode }> = ({ childr
   // API base URL - use environment variable for separate deployment
   const API_BASE = import.meta.env.VITE_ADMIN_API_URL ||
     (import.meta.env.PROD
-      ? 'https://your-admin-service.onrender.com'  // ← Replace with your admin service URL
+      ? 'https://admin-service-xq0t.onrender.com'  // ← Replace with your admin service URL
       : 'http://localhost:3002');
 
   const getAuthHeaders = () => {
