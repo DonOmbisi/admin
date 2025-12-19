@@ -1,0 +1,30 @@
+{
+  "name": "everythingmat-admin-combined",
+  "version": "1.0.0",
+  "description": "Combined admin service with frontend",
+  "main": "combined-server.js",
+  "scripts": {
+    "start": "node combined-server.js",
+    "dev": "nodemon combined-server.js",
+    "build-frontend": "cd ../frontend && npm install && PATH=\"$PWD/node_modules/.bin:$PATH\" npm run build",
+    "copy-frontend": "mkdir -p dist && cp -r ../frontend/dist/* dist/",
+    "setup": "npm run build-frontend && npm run copy-frontend && npm install",
+    "deploy-prep": "npm run setup"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "mongoose": "^7.5.0",
+    "jsonwebtoken": "^9.0.2",
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.3.1",
+    "helmet": "^7.0.0",
+    "express-rate-limit": "^6.10.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

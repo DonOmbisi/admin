@@ -1,0 +1,42 @@
+{
+  "name": "everythingmat-admin-portal",
+  "version": "1.0.0",
+  "description": "Complete admin management portal for EverythingMat e-commerce platform",
+  "main": "index.js",
+  "scripts": {
+    "install:all": "npm install && npm run install:frontend && npm run install:service",
+    "install:frontend": "cd admin-frontend && npm install",
+    "install:service": "cd admin-service && npm install",
+    "dev": "concurrently \"npm run dev:service\" \"npm run dev:frontend\"",
+    "dev:frontend": "cd admin-frontend && npm run dev",
+    "dev:service": "cd admin-service && npm run dev",
+    "build": "npm run build:frontend && npm run build:service",
+    "build:frontend": "cd admin-frontend && npm run build",
+    "build:service": "cd admin-service && npm run build",
+    "start": "npm run start:service",
+    "start:service": "cd admin-service && npm start",
+    "test": "npm run test:frontend && npm run test:service",
+    "test:frontend": "cd admin-frontend && npm test",
+    "test:service": "cd admin-service && npm test"
+  },
+  "keywords": [
+    "admin",
+    "ecommerce",
+    "react",
+    "nodejs",
+    "everythingmat"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.0"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/everythingmat-admin-portal.git"
+  }
+}

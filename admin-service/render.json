@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "services": {
+    "admin-service": {
+      "type": "web",
+      "name": "everythingmat-admin-service",
+      "env": "node",
+      "rootDir": "admin-service",
+      "buildCommand": "npm install",
+      "startCommand": "npm start",
+      "instanceType": "free",
+      "envVars": {
+        "PORT": "3002",
+        "NODE_ENV": "production",
+        "MAIN_BACKEND_URL": "https://your-main-backend.onrender.com",
+        "MONGODB_URI": "mongodb+srv://DONMIKE:dataviz@cluster0.ca18ur6.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",
+        "JWT_SECRET": "e7f3b2c4a1d94f8b9c6e3a7d2f5b8c1e3d6a9f0b2c4e7a8d9f1b3c6e2a4d7f9"
+      }
+    },
+    "admin-frontend": {
+      "type": "static",
+      "name": "everythingmat-admin-frontend",
+      "rootDir": "admin-frontend",
+      "buildCommand": "npm ci && npm run build",
+      "publishDir": "admin-frontend/dist",
+      "envVars": {
+        "VITE_ADMIN_API_URL": "https://your-admin-service.onrender.com"
+      }
+    }
+  }
+}

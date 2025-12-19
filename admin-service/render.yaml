@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: everythingmat-admin
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: node simple-server.js
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: MAIN_BACKEND_URL
+        value: https://everythingmat-backend.onrender.com
+      - key: NODE_ENV
+        value: production

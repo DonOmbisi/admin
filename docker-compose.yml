@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  # Admin Service (Backend)
+  admin-service:
+    build:
+      context: ./admin-service
+      dockerfile: Dockerfile
+    ports:
+      - "3002:3002"
+    environment:
+      - NODE_ENV=development
+      - PORT=3002
+      - MAIN_BACKEND_URL=http://host.docker.internal:3001
+      - MONGODB_URI=mongodb://mongodb:27017/everythingmat-admin
+      - JWT_SECRET=development-jwt-secret
+    depends_on:
+      - mongodb
+    volumes:
+      - ./admin-service:/app
+      - /app/node_modules
+    networks:
+      - admin-network
+
+  # Admin Frontend (React App)
+  admin-frontend:
+    build:
+      context: ./admin-frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - VITE_ADMIN_API_URL=http://localhost:3002
+    volumes:
+      - ./admin-frontend:/app
+      - /app/node_modules
+    networks:
+      - admin-network
+
+  # MongoDB for Admin Service
+  mongodb:
+    image: mongo:7.0
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_DATABASE=everythingmat-admin
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - admin-network
+
+volumes:
+  mongodb_data:
+
+networks:
+  admin-network:
+    driver: bridge
