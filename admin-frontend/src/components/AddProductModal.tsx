@@ -214,33 +214,33 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ isOpen, onClose }) =>
                               const imageUrl = uploadResult.imageUrl;
                               setImageUrls([...imageUrls, imageUrl]);
                               
-                              // Also analyze the image for auto-fill
-                              const analyzeFormData = new FormData();
-                              analyzeFormData.append('image', file);
-                              
-                              const analysisResponse = await fetch(`${API_BASE}/api/clarifai/analyze-file`, {
-                                method: 'POST',
-                                body: analyzeFormData
-                              });
-                              
-                              if (analysisResponse.ok) {
-                                const result = await analysisResponse.json();
-                                console.log('Analysis result:', result);
-                                
-                                // Use concepts to fill out product details
-                                if (result.outputs && result.outputs[0] && result.outputs[0].data && result.outputs[0].data.concepts) {
-                                  const concepts = result.outputs[0].data.concepts;
-                                  if (concepts.length > 0) {
-                                    const topConcept = concepts[0];
-                                    setFormData(prev => ({
-                                      ...prev,
-                                      name: topConcept.name || prev.name,
-                                      description: concepts.slice(0, 5).map((c: any) => c.name).join(', ') || prev.description,
-                                      category: topConcept.name.split(' ')[0] || prev.category
-                                    }));
-                                  }
-                                }
-                              }
+                              // TODO: Re-enable Clarifai image analysis once endpoint is implemented
+                              // const analyzeFormData = new FormData();
+                              // analyzeFormData.append('image', file);
+                              //
+                              // const analysisResponse = await fetch(`${API_BASE}/api/clarifai/analyze-file`, {
+                              //   method: 'POST',
+                              //   body: analyzeFormData
+                              // });
+                              //
+                              // if (analysisResponse.ok) {
+                              //   const result = await analysisResponse.json();
+                              //   console.log('Analysis result:', result);
+                              //
+                              //   // Use concepts to fill out product details
+                              //   if (result.outputs && result.outputs[0] && result.outputs[0].data && result.outputs[0].data.concepts) {
+                              //     const concepts = result.outputs[0].data.concepts;
+                              //     if (concepts.length > 0) {
+                              //       const topConcept = concepts[0];
+                              //       setFormData(prev => ({
+                              //         ...prev,
+                              //         name: topConcept.name || prev.name,
+                              //         description: concepts.slice(0, 5).map((c: any) => c.name).join(', ') || prev.description,
+                              //         category: topConcept.name.split(' ')[0] || prev.category
+                              //       }));
+                              //     }
+                              //   }
+                              // }
                             } else {
                               alert('Failed to upload image. Please try again.');
                             }
