@@ -3,10 +3,7 @@ import { useAdminService } from '../context/AdminServiceContext';
 import { X, Save, Upload } from 'lucide-react';
 
 // API base URL - use environment variable for separate deployment
-const API_BASE = import.meta.env.VITE_ADMIN_API_URL ||
-  (import.meta.env.PROD
-    ? 'https://admin-service-xq0t.onrender.com'
-    : 'http://localhost:3002');
+const API_BASE = import.meta.env.VITE_ADMIN_API_URL || 'https://admin-service-xq0t.onrender.com';
 
 // Initialize Clarifai with admin service proxy
 const clarifaiApp = {
