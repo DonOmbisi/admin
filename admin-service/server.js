@@ -10,6 +10,7 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 3002;
 const MAIN_BACKEND_URL = process.env.MAIN_BACKEND_URL || 'http://localhost:3001';
+const path = require('path');
 
 // Security middleware
 app.use(helmet());
@@ -17,10 +18,8 @@ app.use(cors({
   origin: [
     'http://localhost:5173',  // Vite dev server
     'http://localhost:3000',  // Local frontend
-    'https://everythingmaternity.vercel.app',  // Main app
-    process.env.NODE_ENV === 'production'
-      ? 'https://your-admin-frontend.onrender.com'  // ← Replace with your actual admin frontend URL
-      : undefined
+    'https://admin-frontend-39xw.onrender.com',  // Main app
+    'https://admin-service-xq0t.onrender.com' // Admin service
   ].filter(Boolean),  // Remove undefined values
   credentials: true
 }));
